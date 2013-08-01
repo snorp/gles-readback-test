@@ -122,7 +122,7 @@ class GLES20QuadRenderer implements GLSurfaceView.Renderer {
         ByteBuffer glPixelsBuffer = ByteBuffer.allocateDirect(mTexWidth * mTexHeight * 3);
         glPixelsBuffer.clear();
 
-        GLES20.glReadPixels(0, mHeight - mTexHeight, mTexWidth, mTexHeight,
+        GLES20.glReadPixels(0, 0, mTexWidth, mTexHeight,
                             GLES20.GL_RGB,
                             GLES20.GL_UNSIGNED_BYTE,
                             glPixelsBuffer);
@@ -335,13 +335,16 @@ class GLES20QuadRenderer implements GLSurfaceView.Renderer {
     private static final int QUAD_VERTICES_DATA_UV_OFFSET = 3;
 
     private final float[] mQuadVerticesData ={
-        -1f, -1f, 0.0f, // Position 0
-        -0.0f, 1.0f, // TexCoord 0
-        -1f, 1f, 0.0f, // Position 1
-        0.0f, 0.0f, // TexCoord 1
-        1f, -1f, 0.0f, // Position 2
+        -1f, 1f, 0.0f, // Position 0
+        0.0f, 0.0f, // TexCoord 0
+
+        -1f, -1f, 0.0f, // Position 1
+        0.0f, 1.0f, // TexCoord 1
+
+        1f, 1f, 0.0f, // Position 2
         1.0f, 0.0f, // TexCoord 2
-        1f, 1f, 0.0f, // Position 3
+
+        1f, -1f, 0.0f, // Position 3
         1.0f, 1.0f // TexCoord 3
     };
 
