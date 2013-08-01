@@ -29,7 +29,7 @@ class BasicGLSurfaceView extends GLSurfaceView {
     public BasicGLSurfaceView(Context context) {
         super(context);
         setEGLContextClientVersion(2);
-        setEGLConfigChooser (8, 8, 8, 0, 0, 0);
+        setEGLConfigChooser (5, 6, 5, 0, 0, 0);
         setRenderer(new GLES20QuadRenderer(context));
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
     }

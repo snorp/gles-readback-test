@@ -119,17 +119,17 @@ class GLES20QuadRenderer implements GLSurfaceView.Renderer {
 
         GLES20.glFinish();
 
-        ByteBuffer glPixelsBuffer = ByteBuffer.allocateDirect(mTexWidth * mTexHeight * 3);
+        ByteBuffer glPixelsBuffer = ByteBuffer.allocateDirect(mTexWidth * mTexHeight * 4);
         glPixelsBuffer.clear();
 
         GLES20.glReadPixels(0, 0, mTexWidth, mTexHeight,
-                            GLES20.GL_RGB,
+                            GLES20.GL_RGBA,
                             GLES20.GL_UNSIGNED_BYTE,
                             glPixelsBuffer);
         GLES20.glFinish();
         checkGlError("glReadPixels");
 
-        ByteBuffer flipped = flipY(glPixelsBuffer, mTexWidth, mTexHeight, mTexWidth * 3);
+        ByteBuffer flipped = flipY(glPixelsBuffer, mTexWidth, mTexHeight, mTexWidth * 4);
 
         glPixelsBuffer = flipped;
         glPixelsBuffer.position(0);
@@ -138,19 +138,21 @@ class GLES20QuadRenderer implements GLSurfaceView.Renderer {
         int numDiff = 0;
         int maxDiff = 0;
 
-        int rowStride = mTexWidth * 3;
+        int stride1 = mTexWidth * 3;
+        int stride2 = mTexWidth * 4;
 
         for (int row = 0; row < mTexHeight; row++) {
-            int rowStart = row * rowStride;
+            int rowStart1 = row * stride1;
+            int rowStart2 = row * stride2;
 
             for (int col = 0; col < mTexWidth; col++) {
-                int r1 = getPixel(mPixels, rowStart + (col*3));
-                int g1 = getPixel(mPixels, rowStart + (col*3) + 1);
-                int b1 = getPixel(mPixels, rowStart + (col*3) + 2);
+                int r1 = getPixel(mPixels, rowStart1 + (col*3));
+                int g1 = getPixel(mPixels, rowStart1 + (col*3) + 1);
+                int b1 = getPixel(mPixels, rowStart1 + (col*3) + 2);
 
-                int r2 = getPixel(glPixelsBuffer, rowStart + (col*3));
-                int g2 = getPixel(glPixelsBuffer, rowStart + (col*3) + 1);
-                int b2 = getPixel(glPixelsBuffer, rowStart + (col*3) + 2);
+                int r2 = getPixel(glPixelsBuffer, rowStart2 + (col*4));
+                int g2 = getPixel(glPixelsBuffer, rowStart2 + (col*4) + 1);
+                int b2 = getPixel(glPixelsBuffer, rowStart2 + (col*4) + 2);
 
                 if (r1 == r2 && g1 == g2 && b1 == b2) {
                     numSame++;
@@ -188,9 +190,9 @@ class GLES20QuadRenderer implements GLSurfaceView.Renderer {
         });
 
         glPixelsBuffer.position(0);
-        GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGB,
+        GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA,
                             mTexWidth, mTexHeight, 0,
-                            GLES20.GL_RGB, GLES20.GL_UNSIGNED_BYTE, glPixelsBuffer);
+                            GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, glPixelsBuffer);
         GLES20.glFinish();
         checkGlError("glTexImage2D");
     }
