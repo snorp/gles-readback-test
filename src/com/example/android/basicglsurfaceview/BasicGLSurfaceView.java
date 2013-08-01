@@ -21,11 +21,22 @@ import android.opengl.GLSurfaceView;
 
 import android.opengl.GLES20;
 
+import android.util.Log;
+
+import android.view.MotionEvent;
+
 class BasicGLSurfaceView extends GLSurfaceView {
     public BasicGLSurfaceView(Context context) {
         super(context);
         setEGLContextClientVersion(2);
-        setRenderer(new GLES20TriangleRenderer(context));
+        setEGLConfigChooser (8, 8, 8, 0, 0, 0);
+        setRenderer(new GLES20QuadRenderer(context));
+        setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+    }
+
+    public boolean onTouchEvent(MotionEvent e) {
+    	requestRender();
+    	return false;
     }
 }
 
